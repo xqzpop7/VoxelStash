@@ -56,6 +56,6 @@ jobs:
           name: ${{ steps.vars.outputs.release_title }}
           tag_name: ${{ steps.vars.outputs.tag_name }}
           prerelease: ${{ steps.vars.outputs.prerelease }}
-          files: build/libs/VoxelStash.jar
+          files: build/libs/VoxelStash-${{ steps.vars.outputs.tag_name }}.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
