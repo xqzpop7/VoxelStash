@@ -7,10 +7,15 @@ on:
       - '[0-9]+.[0-9]+.[0-9]+-*'
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
+  build-and-release:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
     steps:
-      - name: Checkout Source Repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up JDK 25
@@ -18,9 +23,12 @@ jobs:
         with:
           java-version: '25'
           distribution: 'temurin'
-          cache: 'gradle'
+          cache: gradle
 
-      - name: Generate JavaDoc Site
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        
+      - name: Build with Gradle
         run: ./gradlew javadoc
 
       - name: Checkout Destination Repository
