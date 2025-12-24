@@ -1,12 +1,20 @@
 package dev.fruitypop.window;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.system.MemoryStack;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.Objects;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
+import static org.lwjgl.stb.STBImage.*;
+
+import dev.fruitypop.Utils;
 
 public class GLFW {
 
@@ -38,6 +46,30 @@ public class GLFW {
         window = glfwCreateWindow(1280, 720, "GLFW Window", NULL, NULL);
         if (window == NULL) {
             throw new RuntimeException("Failed to create the GLFW window.");
+        }
+
+        // Set the window icon
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            ByteBuffer fileBuffer = Utils.ioResourceToByteBuffer("/icon.png", 1024);
+            IntBuffer w = stack.mallocInt(1);
+            IntBuffer h = stack.mallocInt(1);
+            IntBuffer comp = stack.mallocInt(1);
+
+            ByteBuffer image = stbi_load_from_memory(fileBuffer, w, h, comp, 4);
+            if (image == null) {
+                throw new RuntimeException("Failed to load image for icon: " + stbi_failure_reason());
+            }
+
+            GLFWImage.Buffer images = GLFWImage.malloc(1);
+            GLFWImage icon = GLFWImage.create().width(w.get(0)).height(h.get(0)).pixels(image);
+            images.put(0, icon);
+
+            glfwSetWindowIcon(window, images);
+
+            stbi_image_free(image);
+            org.lwjgl.system.MemoryUtil.memFree(fileBuffer);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to load window icon.", e);
         }
 
         // Set up a key callback. It will be called every time a key is pressed.

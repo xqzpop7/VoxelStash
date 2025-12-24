@@ -20,6 +20,19 @@ application {
     applicationDefaultJvmArgs = ['--enable-native-access=ALL-UNNAMED']
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': mainJavaClass
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+}
+
+
 switch (OperatingSystem.current()) { // List of supported Operating Systems
     case OperatingSystem.FREE_BSD:
         project.ext.lwjglNatives = "natives-freebsd" // FreeBSD
