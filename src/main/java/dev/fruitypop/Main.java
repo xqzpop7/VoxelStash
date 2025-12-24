@@ -1,5 +1,7 @@
 package dev.fruitypop;
 
+import dev.fruitypop.window.GLFW;
+
 /**
  * The Main class serves as the entry point.
  * It simply prints out the command-line arguments.
@@ -18,5 +20,7 @@ public class Main {
         } else {
             System.out.println("You didn't specify any arguments.");
         }
+
+        new GLFW().run();
     }
 }

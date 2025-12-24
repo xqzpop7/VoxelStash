@@ -5,11 +5,6 @@ plugins {
     id 'application'
 }
 
-apply { // Local imports
-    from 'gradle/tasks.gradle'
-    from 'gradle/helpers.gradle'
-}
-
 group = projectGroup
 version = projectVersion
 
@@ -22,6 +17,7 @@ java {
 
 application {
     mainClass = mainJavaClass
+    applicationDefaultJvmArgs = ['--enable-native-access=ALL-UNNAMED']
 }
 
 switch (OperatingSystem.current()) { // List of supported Operating Systems
@@ -40,15 +36,7 @@ switch (OperatingSystem.current()) { // List of supported Operating Systems
 }
 
 repositories {
-    if (!project.hasProperty('offline')) {
-        // Primary: Maven Central (when online)
-        mavenCentral()
-    } else {
-        // Fallback: Local repository (when offline)
-        flatDir {
-            dirs 'libs'
-        }
-    }
+    mavenCentral()
 }
 
 dependencies {
