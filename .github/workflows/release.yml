@@ -40,7 +40,7 @@ jobs:
           TITLE=$TAG
 
           # Check for suffixes
-          if [[ $TAG =~ -(prealpha|alpha|beta|dev|draft)$ ]]; then
+          if [[ $TAG =~ -(PRE-ALPHA|ALPHA|BETA|DEV|DRAFT)$ ]]; then
             PRERELEASE=true
           elif [[ $TAG =~ -release$ ]]; then
             # Strip -release for the title
