@@ -1,0 +1,40 @@
+ext {
+    // Text formatter helper
+    format = { String text, String color, String style ->
+        String colorCode
+        switch (color) {
+            case "red": colorCode = "\u001B[31m"
+                break
+            case "green": colorCode = "\u001B[32m"
+                break
+            case "yellow": colorCode = "\u001B[33m"
+                break
+            case "blue": colorCode = "\u001B[34m"
+                break
+            case "cyan": colorCode = "\u001B[36m"
+                break
+            default: throw new GradleException("Invalid color specified in formatter!")
+        }
+
+        String styleCode = ""
+        switch (style) {
+            case "bold": styleCode = "\u001B[1m"
+                break
+            case "underline": styleCode = "\u001B[4m"
+                break
+            default: break
+        }
+
+        return "${styleCode}${colorCode}${text}\u001B[0m"
+    }
+
+    downloadFile = { String url, String destination ->
+        println "Downloading: ${url}"
+        try {
+            ant.get(src: url, dest: destination)
+        } catch (Exception e) {
+            println "Failed to download ${url}: ${e.message}"
+        }
+    }
+
+}

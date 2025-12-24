@@ -1,0 +1,85 @@
+tasks.register('downloadAllDependencies', DefaultTask) {
+    description = 'Download everything for offline development.'
+    group = 'build setup'
+
+    doLast {
+        // HashSet for storing all URLS from which to fetch filenames to our fileList.
+        HashSet<String> processedUrlsList = new HashSet<String>()
+        // HashSet for storing all finalized URLS pointing to files which we will download.
+        HashSet<String> finalizedUrlList = new HashSet<String>()
+        // ArrayList for failed artifacts.
+        def failedConfigurations = []
+
+        configurations.each { config ->
+            if (config.canBeResolved) {
+                try {
+                    println "Processing configuration: ${config.name}"
+                    config.resolvedConfiguration.resolvedArtifacts.each { artifact ->
+                        try {
+                            def moduleId = artifact.moduleVersion.id
+                            def groupPath = moduleId.group.replace('.', '/')
+                            def artifactId = moduleId.name
+                            def version = moduleId.version
+
+                            def url = "https://repo1.maven.org/maven2/${groupPath}/${artifactId}/${version}/"
+
+                            if (processedUrlsList.add(url)) {
+                                println "URL: ${url}"
+
+                                URLConnection connection = new URI(url).toURL().openConnection()
+                                connection.setRequestProperty("User-Agent", "Gradle Build Script")
+
+                                String HTML = connection.inputStream.text
+
+                                HTML.eachMatch(/title="([^"]+)">/) {  match ->
+                                    finalizedUrlList.add(url + match[1])
+                                }
+
+                                finalizedUrlList.removeAll { it ==~ /.*\.(asc|md5|sha1|sha256|asc\.md5|asc\.sha1|asc\.sha256|asc\.sha512)$/}
+
+                                finalizedUrlList.removeAll { it ==~ /.*(?:linux-arm32\.jar|linux-arm64\.jar|linux-ppc64le\.jar|linux-riscv64\.jar|macos-arm64\.jar|windows-arm64\.jar|windows-x86\.jar)(?:\.sha512)?$/}
+
+                                println "\u001B[1m---\u001B[0m"
+                            }
+                        } catch (Exception e) {
+                            println "Failed to process artifact: ${e.message}"
+                        }
+                    }
+                } catch (Exception e) {
+                    failedConfigurations.add("${config.name}: ${e.message}")
+                }
+            }
+        }
+
+        println "\n\n\n"
+        println "Total unique dependencies: ${processedUrlsList.size()}"
+        println "Total unique files: ${finalizedUrlList.size()}"
+        if (!failedConfigurations.isEmpty()) {
+            println "Failed configurations:"
+            failedConfigurations.each { println "  - ${it}" }
+        }
+
+        println "----------------------------------------------------"
+        println "Starting download to libs/* ..."
+
+        long startWholeDownloadTime = System.currentTimeMillis()
+
+        int i = 0
+        for (String fileURL in finalizedUrlList) {
+            println "---"
+            println "Progress: ${i}/${finalizedUrlList.size()}"
+
+            long startDownloadTime = System.currentTimeMillis()
+            downloadFile(fileURL, "libs/")
+
+            println "Took: ${System.currentTimeMillis() - startDownloadTime} ms"
+
+            i++
+        }
+
+        println "\n\n\n----------------------------------------------------"
+        println "DOWNLOAD DONE"
+        println "Took: ${(System.currentTimeMillis() - startWholeDownloadTime) / 60000} minutes"
+        println "Downloaded: ${i}/${finalizedUrlList.size()} of files."
+    }
+}
