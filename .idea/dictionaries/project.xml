@@ -4,8 +4,10 @@
       <w>aarch</w>
       <w>armv</w>
       <w>fruitypop</w>
+      <w>jvmargs</w>
       <w>riscv</w>
       <w>vidmode</w>
+      <w>xqzpop</w>
     </words>
   </dictionary>
 </component>

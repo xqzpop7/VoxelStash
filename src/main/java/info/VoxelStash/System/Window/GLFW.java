@@ -1,4 +1,4 @@
-package dev.fruitypop.window;
+package info.VoxelStash.System.Window;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -14,7 +14,7 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.stb.STBImage.*;
 
-import dev.fruitypop.Utils;
+import info.VoxelStash.Utils;
 
 public class GLFW {
 
@@ -43,7 +43,7 @@ public class GLFW {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // The window will be resizable.
 
         // Create the window
-        window = glfwCreateWindow(1280, 720, "GLFW Window", NULL, NULL);
+        window = glfwCreateWindow(1280, 720, "VoxelStash", NULL, NULL);
         if (window == NULL) {
             throw new RuntimeException("Failed to create the GLFW window.");
         }

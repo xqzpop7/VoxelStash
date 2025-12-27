@@ -1,6 +1,6 @@
-package dev.fruitypop;
+package info.VoxelStash;
 
-import dev.fruitypop.window.GLFW;
+import info.VoxelStash.System.Window.GLFW;
 
 /**
  * The Main class serves as the entry point.

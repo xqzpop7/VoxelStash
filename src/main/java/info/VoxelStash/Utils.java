@@ -1,4 +1,4 @@
-package dev.fruitypop;
+package info.VoxelStash;
 
 import org.lwjgl.glfw.GLFW;
 

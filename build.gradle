@@ -8,7 +8,6 @@ plugins {
 group = projectGroup
 version = projectVersion
 
-// Java version.
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(javaToolChainVersion)
@@ -17,7 +16,7 @@ java {
 
 application {
     mainClass = mainJavaClass
-    applicationDefaultJvmArgs = ['--enable-native-access=ALL-UNNAMED']
+    applicationDefaultJvmArgs = [JVMArguments]
 }
 
 jar {
@@ -54,10 +53,11 @@ repositories {
 
 dependencies {
     testImplementation platform("org.junit:junit-bom:$JUnitVersion")
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
 
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+    implementation platform("org.apache.logging.log4j:log4j-bom:$Log4jVersion")
 
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-yoga"
@@ -105,8 +105,14 @@ dependencies {
     implementation "org.lwjgl:lwjgl-vma::$lwjglNatives"
     if (lwjglNatives == "natives-macos") implementation "org.lwjgl:lwjgl-vulkan::$lwjglNatives"
     implementation "org.lwjgl:lwjgl-xxhash::$lwjglNatives"
+
     implementation "org.joml:joml:${JOMLVersion}"
     implementation "org.joml:joml-primitives:${JOMLPrimitivesVersion}"
+
+    implementation "org.apache.logging.log4j:log4j-api"
+
+    runtimeOnly 'org.apache.logging.log4j:log4j-core'
+    runtimeOnly 'org.apache.logging.log4j:log4j-layout-template-json'
 }
 
 test {
