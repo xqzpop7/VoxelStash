@@ -1,9 +1,9 @@
+gradle
 .gradle
 build/
 libs/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
+gradlew
+gradlew.bat
 .kotlin
 
 ### IntelliJ IDEA ###
