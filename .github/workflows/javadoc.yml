@@ -23,7 +23,12 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build with Gradle
-        run: ./gradlew javadoc
+        run: |
+          # Make sure we can execute.
+          chmod +x ./gradlew
+
+          # Build JavaDoc.
+          ./gradlew javadoc
 
       - name: Checkout Web Branch
         uses: actions/checkout@v4
@@ -54,3 +59,5 @@ jobs:
             git commit -m "Updated VoxelStash JavaDoc!"
             git push origin web
           fi
+
+
