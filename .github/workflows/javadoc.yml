@@ -20,6 +20,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-disabled: true
 
       - name: Build with Gradle
         run: |
@@ -61,6 +63,7 @@ jobs:
             git commit -m "Updated VoxelStash JavaDoc!"
             git push origin web
           fi
+
 
 
 
