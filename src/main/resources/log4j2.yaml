@@ -1,0 +1,40 @@
+#file: noinspection SpellCheckingInspection
+Configuration:
+  Appenders:
+    Console:
+      name: "CONSOLE"
+      PatternLayout:
+        charset: "UTF-8"
+        pattern: "[ %d{HH:mm:ss} ] %-5p [%t]: %m%n"
+    File:
+      - name: "LATEST"
+        fileName: "logs/latest.log"
+        filePattern: "logs/latest.%i.log"
+        PatternLayout:
+          charset: "UTF-8"
+          pattern: "[ %d{HH:mm:ss} ] %-5p [%t]: %m%n"
+          immediateFlush: true
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: "500MB"
+          DefaultRolloverStrategy:
+            max: 10
+    RollingFile:
+      name: "SIZE"
+      fileName: "logs/${date:yyyy-MM-dd_HH-mm-ss}.log"
+      filePattern: "logs/${date:yyyy-MM-dd_HH-mm-ss}.%i.log"
+      PatternLayout:
+        charset: "UTF-8"
+        pattern: "[ %d{HH:mm:ss} ] %-5p [%t]: %m%n"
+      Policies:
+        SizeBasedTriggeringPolicy:
+          size: "500MB"
+        DefaultRolloverStrategy:
+          max: 10
+  Loggers:
+    Root:
+      level: "INFO"
+      AppenderRef:
+        - ref: "CONSOLE"
+        - ref: "LATEST"
+        - ref: "SIZE"

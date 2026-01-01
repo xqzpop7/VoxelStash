@@ -8,13 +8,15 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 
+import info.VoxelStash.System.Log.Root.LogException;
+
 public class Utils {
      public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize) throws IOException {
         ByteBuffer buffer;
 
         try (InputStream source = GLFW.class.getResourceAsStream(resource)) {
             if (source == null) {
-                throw new IOException("Resource not found: " + resource);
+                LogException.InputOutput("Resource not found: " + resource);
             }
             try (ReadableByteChannel rbc = Channels.newChannel(source)) {
                 buffer = org.lwjgl.system.MemoryUtil.memAlloc(bufferSize);

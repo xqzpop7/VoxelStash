@@ -2,6 +2,7 @@
   <dictionary name="project">
     <words>
       <w>aarch</w>
+      <w>appenders</w>
       <w>armv</w>
       <w>fruitypop</w>
       <w>jvmargs</w>

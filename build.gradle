@@ -16,7 +16,7 @@ java {
 
 application {
     mainClass = mainJavaClass
-    applicationDefaultJvmArgs = [JVMArguments]
+    applicationDefaultJvmArgs = ["--enable-native-access=ALL-UNNAMED"]
 }
 
 jar {
@@ -111,8 +111,9 @@ dependencies {
 
     implementation "org.apache.logging.log4j:log4j-api"
 
-    runtimeOnly 'org.apache.logging.log4j:log4j-core'
-    runtimeOnly 'org.apache.logging.log4j:log4j-layout-template-json'
+    runtimeOnly "org.apache.logging.log4j:log4j-core"
+
+    runtimeOnly "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$JacksonDataFormatYamlVersion"
 }
 
 test {

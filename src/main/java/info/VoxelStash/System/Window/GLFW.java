@@ -15,6 +15,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import static org.lwjgl.stb.STBImage.*;
 
 import info.VoxelStash.Utils;
+import info.VoxelStash.System.Log.Root.*;
 
 public class GLFW {
 
@@ -28,11 +29,11 @@ public class GLFW {
 
     private void init() {
         // Set up an error callback. The default implementation will print the error message in System.err.
-        GLFWErrorCallback.createPrint(System.err).set();
+        LogGLFWErrorCallback.Create();
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
         if (!glfwInit()) {
-            throw new IllegalStateException("Unable to initialize GLFW");
+            LogException.IllegalState("Unable to initialize GLFW");
         }
 
         // Configure GLFW.
@@ -110,7 +111,7 @@ public class GLFW {
 
         // Terminate GLFW and free the error callback.
         glfwTerminate();
-        Objects.requireNonNull(glfwSetErrorCallback(null)).free();
+        LogGLFWErrorCallback.Free();
         System.out.println("GLFW resources cleaned up.");
     }
 }
