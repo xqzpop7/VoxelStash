@@ -17,13 +17,15 @@ jobs:
         with:
           java-version: '25'
           distribution: 'temurin'
-          cache: gradle
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v5
 
       - name: Build with Gradle
         run: |
+          # Make sure we build gradle.
+          ./gradlew build
+          
           # Make sure we can execute.
           chmod +x ./gradlew
 
@@ -59,5 +61,6 @@ jobs:
             git commit -m "Updated VoxelStash JavaDoc!"
             git push origin web
           fi
+
 
 
